@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/catalogue
+    username: catalogue
+    password: catalogue
+  flyway:
+    schema:
+      - public
+      - catalogue
+    baseline-on-migrate: true
+    baseline-version: 24.1.1
+
+  jpa:
+    show-sql: true
+
+server:
+  port: 8081
+
+logging:
+  level:
+    org.hibernate.SQL: INFO
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
