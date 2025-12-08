@@ -4,11 +4,9 @@ spring:
     username: catalogue
     password: catalogue
   flyway:
-    schema:
+    schemas:
       - public
       - catalogue
-    baseline-on-migrate: true
-    baseline-version: 24.1.1
 
   jpa:
     show-sql: true
