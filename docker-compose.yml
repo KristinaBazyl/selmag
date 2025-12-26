@@ -49,6 +49,21 @@ services:
     volumes:
       - ./config/keycloak/import:/opt/keycloak/data/import
 
+#    Mongo DB feedback-сервиса
+  feedback-db:
+    image: mongo:7
+    container_name: feedback-db
+    restart: unless-stopped
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: admin
+#      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - feedback_data:/data/db
+
+
 volumes:
   catalogue_data:
   keycloak_data:
+  feedback_data:
