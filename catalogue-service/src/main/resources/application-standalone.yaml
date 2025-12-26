@@ -9,7 +9,11 @@ spring:
       - catalogue
 
   jpa:
-    show-sql: true
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 10
 #  security:
 #    oauth2:
 #      resourceserver:
@@ -21,5 +25,7 @@ server:
 
 logging:
   level:
-    org.hibernate.SQL: INFO
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#    org.hibernate.SQL: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: trace
+    org.springframework.orm.jpa: DEBUG

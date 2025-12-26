@@ -1,7 +1,7 @@
-package ag.selm.customer.service;
+package ag.selm.feedback.service;
 
-import ag.selm.customer.entity.FavouriteProduct;
-import ag.selm.customer.repository.FavoriteProductRepository;
+import ag.selm.feedback.entity.FavouriteProduct;
+import ag.selm.feedback.repository.FavoriteProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultFavoriteProductsService implements FavoriteProductsService{
+public class DefaultFavouriteProductsService implements FavouriteProductsService {
 
     private  final FavoriteProductRepository favoriteProductRepository;
 

@@ -1,16 +1,19 @@
-package ag.selm.customer.service;
+package ag.selm.customer.client;
 
 import ag.selm.customer.entity.FavouriteProduct;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface FavoriteProductsService {
+import java.util.Optional;
+
+public interface FavouriteProductsClient {
+
+    Flux<FavouriteProduct> findFavouriteProducts();
+
+    Mono<FavouriteProduct> findFavouriteProductByProductId(int productId);
 
     Mono<FavouriteProduct> addProductToFavourites(int productId);
 
     Mono<Void> removeProductFromFavourites(int productId);
 
-    Mono<FavouriteProduct> findFavouriteProductByProduct(int productId);
-
-    Flux<FavouriteProduct> findFavouriteProducts();
 }

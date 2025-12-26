@@ -1,0 +1,27 @@
+server:
+  port: 8084
+
+spring:
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 10
+
+
+logging:
+  level:
+    root: DEBUG
+    # 1. Видеть входящие HTTP запросы (почему пришел 404 или 201)
+    org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod: DEBUG
+
+    # 2. Видеть сам SQL текст
+    org.hibernate.SQL: DEBUG
+
+    # 3. Видеть ЗНАЧЕНИЯ параметров в запросе (например, какой именно id ищется)
+    org.hibernate.orm.jdbc.bind: TRACE
+
+    # 4. Видеть жизненный цикл транзакций (важно для понимания гонки данных)
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
