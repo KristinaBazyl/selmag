@@ -8,9 +8,10 @@ import ag.selm.customer.controller.payload.NewProductReviewPayload;
 import ag.selm.customer.entity.Product;
 
 
-import ch.qos.logback.core.net.server.Client;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.web.reactive.result.view.CsrfRequestDataValueProcessor;
 import org.springframework.security.web.server.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -32,18 +33,19 @@ public class ProductController {
 
     private final FavouriteProductsClient favoriteProductsClient;
 
-    private final ProductReviewsClient productReviewsService;
+    private final ProductReviewsClient productReviewsClient;
 
     @ModelAttribute(name = "product", binding = false)
     public Mono<Product> loadProduct(@PathVariable("productId") int id) {
         return this.productsClient.findProduct(id)
-                .switchIfEmpty(Mono.error(new NoSuchElementException("customer.product.error.not_foud")));
+                .switchIfEmpty(Mono.defer(
+                        () -> Mono.error(new NoSuchElementException("customer.product.error.not_foud"))));
     }
 
     @GetMapping
     public Mono<String> getProductPage(@PathVariable("productId") int id, Model model) {
         model.addAttribute("inFavourite", false);
-        return this.productReviewsService.findProductReviewsByProductId(id)
+        return this.productReviewsClient.findProductReviewsByProductId(id)
                 .collectList()
                 .doOnNext(productReviews -> model.addAttribute("reviews", productReviews))
                 .then(this.favoriteProductsClient.findFavouriteProductByProductId(id)
@@ -75,7 +77,7 @@ public class ProductController {
     public Mono<String> createReview(@PathVariable("productId") int id,
                                      NewProductReviewPayload payload,
                                      Model model) {
-        return this.productReviewsService.createProductReview(id, payload.rating(), payload.review())
+        return this.productReviewsClient.createProductReview(id, payload.rating(), payload.review())
                 .thenReturn("redirect:/customer/products/%d".formatted(id))
                 .onErrorResume(ClientBadRequestException.class, exception -> {
                     model.addAttribute("inFavourite", false);
@@ -89,8 +91,10 @@ public class ProductController {
 
 
     @ExceptionHandler(NoSuchElementException.class)
-    public String handleNoSuchElementException(NoSuchElementException exception, Model model) {
+    public String handleNoSuchElementException(NoSuchElementException exception, Model model,
+                                               ServerHttpResponse response) {
         model.addAttribute("error", exception.getMessage());
+        response.setStatusCode(HttpStatus.NOT_FOUND);
         return "errors/404";
     }
 

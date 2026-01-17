@@ -19,12 +19,12 @@ public class ClientConfig {
 
     @Bean
     @Scope("prototype")
-    public  WebClient.Builder selmagServicesWebClientBuilder(
+    public WebClient.Builder selmagServicesWebClientBuilder(
             ReactiveClientRegistrationRepository clientRegistrationRepository,
-                                                             ServerOAuth2AuthorizedClientRepository authorizedClientRepository){
+            ServerOAuth2AuthorizedClientRepository authorizedClientRepository) {
         ServerOAuth2AuthorizedClientExchangeFilterFunction filter =
                 new ServerOAuth2AuthorizedClientExchangeFilterFunction(clientRegistrationRepository,
-                authorizedClientRepository);
+                        authorizedClientRepository);
         filter.setDefaultClientRegistrationId("keycloak");
         return WebClient.builder()
                 .filter(filter);
@@ -34,7 +34,7 @@ public class ClientConfig {
     @Bean
     public WebClientProductsClient webClientProductsClient(
             @Value("${selmag.services.catalogue.uri:http://localhost:8081}") String catalogueBaseUrl,
-            WebClient.Builder selmagServicesWebClientBuilder){
+            WebClient.Builder selmagServicesWebClientBuilder) {
         return new WebClientProductsClient(selmagServicesWebClientBuilder
                 .baseUrl(catalogueBaseUrl)
                 .build());
@@ -43,7 +43,7 @@ public class ClientConfig {
     @Bean
     public WebClientFavouriteProductsClient webClientFavouriteProductsClient(
             @Value("${selmag.services.feedback.uri:http://localhost:8084}") String feedbackBaseUrl,
-            WebClient.Builder selmagServicesWebClientBuilder){
+            WebClient.Builder selmagServicesWebClientBuilder) {
         return new WebClientFavouriteProductsClient(selmagServicesWebClientBuilder
                 .baseUrl(feedbackBaseUrl)
                 .build());
@@ -52,7 +52,7 @@ public class ClientConfig {
     @Bean
     public WebClientProductReviewsClient webClientProductReviewsClient(
             @Value("${selmag.services.feedback.uri:http://localhost:8084}") String feedbackBaseUrl,
-            WebClient.Builder selmagServicesWebClientBuilder){
+            WebClient.Builder selmagServicesWebClientBuilder) {
         return new WebClientProductReviewsClient(selmagServicesWebClientBuilder
                 .baseUrl(feedbackBaseUrl)
                 .build());
